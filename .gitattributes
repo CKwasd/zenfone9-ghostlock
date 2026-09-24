@@ -1,0 +1,16 @@
+# normalise line endings for text, keep binaries untouched
+* text=auto
+
+*.sh  text eol=lf
+*.c   text eol=lf
+*.h   text eol=lf
+*.md  text eol=lf
+*.json text eol=lf
+*.patch text eol=lf
+Makefile text eol=lf
+
+*.ko     binary
+*.apk    binary
+ksud     binary
+ksuinit  binary
+slide_dev binary

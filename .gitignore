@@ -1,0 +1,33 @@
+# build outputs
+slide_dev
+ghostlock
+*.o
+*.obj
+*.exe
+a.out
+
+# kernel / firmware artifacts (never commit)
+*.img
+*.elf
+*.raw
+*.bin
+
+# logs, dumps, forensics
+*.log
+*.txt
+*.dmp
+core
+*.core
+
+# third-party KernelSU binaries: fetch with scripts/fetch-ksu.sh
+# (kept out of git to stay small; `git add -f ksu/...` to force-include)
+ksu/
+
+# editor / OS junk
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini

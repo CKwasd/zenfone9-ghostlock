@@ -1,0 +1,35 @@
+{
+  "release": "5.10.205-android12-9-00029-g3f12df86bfdb-ab11799032",
+  "kernel_phys_load": 0xA8000000,
+  "pselect_waiter_shift": 0,
+  "compact_waiter": 2,
+  "mm_struct_sz": 0x3C0,
+  "symbols": {
+    "off_init_task": 0x0279BEC0,
+    "off_init_cred": 0x027B0AE0,
+    "off_root_task_group": 0x02991040,
+    "off_selinux_enforcing": 0x02A40B98,
+    "off_selinux_blob_sizes": 0x022EAAF8,
+    "off_security_hook_heads": 0x022EA468,
+    "off_slide_nfulnl_logger": 0x027913A0,
+    "off_slide_loggers_0_1": 0x027912D0,
+    "off_slide_boot_id": 0x028A76D0
+  },
+  "struct_fields": {
+    "task_prio": 0x84,
+    "task_normal_prio": 0x8C,
+    "task_sched_task_group": 0x310,
+    "task_pi_lock": 0x86C,
+    "task_pi_waiters": 0x880,
+    "task_pi_top_task": 0x890,
+    "task_pi_blocked_on": 0x898,
+    "task_pid": 0x5C8,
+    "task_tgid": 0x5CC,
+    "task_atomic_flags": 0x5C4,
+    "task_real_cred": 0x778,
+    "task_cred": 0x780,
+    "task_comm": 0x790,
+    "task_tasks": 0x4C8,
+    "task_seccomp": 0x848
+  }
+}
