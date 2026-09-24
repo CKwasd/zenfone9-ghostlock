@@ -30,7 +30,7 @@ adb shell su -c id
 | 必要 config | `MODULES=y`、`MODVERSIONS=y`、`MODULE_SIG` **未開**、`KPROBES=y` |
 | 不需要 | bootloader 解鎖、改 boot.img、adb root |
 
-> 核心版本必須**完全一致**（偏移與 vermagic 綁定）。其他機型/版本見 §9。
+> 核心版本必須**完全一致**（偏移與 vermagic 綁定）。其他機型/版本見第 9 節。
 
 ---
 
@@ -39,7 +39,7 @@ adb shell su -c id
 1. Windows/Linux PC + `adb`（本文用 `F:\Android\Android ADB\adb.exe`）。
 2. 裝置開啟 USB 偵錯，`adb devices` 可見。
 3. 裝置授權研究聲明（自有裝置）。
-4. 以下檔案（見 §3）。
+4. 以下檔案（見第 3 節）。
 
 ---
 
@@ -49,7 +49,7 @@ adb shell su -c id
 
 | 檔案 | 來源 | 用途 |
 |---|---|---|
-| `qemu\slide_dev` | 由 `qemu\src\` 編譯（見 §3.1） | exploit 主體（提權＋late-load） |
+| `qemu\slide_dev` | 由 `qemu\src\` 編譯（見第 3.1 節） | exploit 主體（提權＋late-load） |
 | `ksu\ksud` | KernelSU v3.3.0 release `ksud-aarch64-linux-android` | late-load 載入器（含 kallsyms 符號注入） |
 | `ksu\kernelsu.ko` | release `lkm-aarch64-android12-5.10_kernelsu.ko` | KernelSU 模組（由 ksud 內嵌載入） |
 | `ksu\ksu.apk` | release `KernelSU_v3.3.0_32601-release.apk` | KernelSU Manager（可選） |
@@ -94,7 +94,7 @@ ADB="F:\Android\Android ADB\adb.exe"
 # 期望：uid=0(root) ... context=u:r:ksu:s0
 ```
 
-若 `su` 尚不可用（首次），先確認 `ksud late-load` 已跑（見 §5.4）。
+若 `su` 尚不可用（首次），先確認 `ksud late-load` 已跑（見第 5.4 節）。
 
 ---
 
@@ -115,7 +115,7 @@ ADB="F:\Android\Android ADB\adb.exe"
 - `sweep 64`：噴塗候選輪數。
 - `sweepstart=25`：直接從歷史黏性命中格開始（`phys=0xaccd7000`）。
 - `ownprobe`：**delta-free 自寫探針**（純 userspace，零 walk 死亡）。
-- `shortseq`：迷你三發序列（見 §5.3）。
+- `shortseq`：迷你三發序列（見第 5.3 節）。
 
 預期日誌：
 ```
@@ -193,11 +193,11 @@ adb install -r F:\Android\IonStack-43499\ksu\ksu.apk
 
 ## 8. 重開機後／持久化
 
-- **LKM 為 per-boot**：重開機後 KernelSU 消失，需重跑 §4（exploit → 自動 late-load）。
+- **LKM 為 per-boot**：重開機後 KernelSU 消失，需重跑第 4 節（exploit → 自動 late-load）。
 - **不改 boot.img 無法在開機最早期自動觸發**（`ksuinit` 需 ramdisk）。因此採「每 boot 執行一次腳本」。
 - 要真正跨重開機自動化：需 `ksud boot-patch`（改 `init_boot`）或 Magisk 式 overlay（超出本教學範圍，且會動到 boot 分區）。
 
-可將 §4 寫成 `run.sh` 一鍵腳本。
+可將第 4 節寫成 `run.sh` 一鍵腳本。
 
 ---
 
