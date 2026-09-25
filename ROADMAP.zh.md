@@ -1,5 +1,7 @@
 # 路線圖 — 我們走過什麼、走錯什麼、最終走通什麼
 
+[English](ROADMAP.md) | **繁體中文**
+
 範圍：CVE-2026-43499 (GhostLock) 於 ASUS Zenfone 9（SM8475），GKI
 `5.10.205-android12-9-00029-g3f12df86bfdb-ab11799032`，VA39。
 目標：root + KernelSU late-load，不改 boot.img。

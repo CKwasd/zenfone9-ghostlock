@@ -1,5 +1,7 @@
 # Roadmap — what we tried, what went wrong, what finally worked
 
+**English** | [繁體中文](ROADMAP.zh.md)
+
 Scope: CVE-2026-43499 (GhostLock) on ASUS Zenfone 9 (SM8475), GKI
 `5.10.205-android12-9-00029-g3f12df86bfdb-ab11799032`, VA39.
 Goal: root + KernelSU late-load, no boot.img change.
@@ -39,7 +41,7 @@ Run once per fresh boot; ~3-4 minutes; no boot partition change.
 1. **perf_event_open was unrestricted** (`perf_event_paranoid=-1`):
    `SAMPLE_IP` gave a deterministic KASLR slide (5461/5461 samples), and
    `SAMPLE_REGS_INTR` self-located `task_struct`. Two long-running problems
-   (placement-adjacent slide guessing, task address) collapsed to one syscall each.
+   collapsed to one syscall each.
 2. **`ownprobe`**: reframed "is this candidate page mine?" into "where is my page?"
    by writing a self-referential value into our own double-mapped spray and
    scanning it from userspace. Placement with **zero kernel deref** → no deaths.
