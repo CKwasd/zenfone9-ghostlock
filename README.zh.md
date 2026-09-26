@@ -44,12 +44,11 @@ zf9-ghostlock/
 ├── scripts/fetch-ksu.sh     # 下載 KernelSU v3.3.0 元件
 ├── ksu/                     # ksud / kernelsu.ko / ksuinit / ksu.apk（gitignore）
 ├── offsets/                 # 5.10.205 偏移量表（見下）
-├── docs/
-│   ├── TUTORIAL.md          # 完整教學（英文）
-│   └── TUTORIAL.zh.md       # 完整教學（中文）
 ├── README.md / README.zh.md
-├── CREDITS.md / CREDITS.zh.md
-└── ROADMAP.md / ROADMAP.zh.md
+└── docs/
+    ├── TUTORIAL.md / TUTORIAL.zh.md   # 完整重現教學
+    ├── CREDITS.md  / CREDITS.zh.md    # 致謝
+    └── ROADMAP.md  / ROADMAP.zh.md    # 走過的路／最終路線
 ```
 
 ---
@@ -101,4 +100,4 @@ MIT（見 `LICENSE`）。**僅供授權之安全研究。**
 
 ## Credits
 
-見 `CREDITS.zh.md`；路線回顧見 `ROADMAP.zh.md`。
+見 `docs/CREDITS.zh.md`；路線回顧見 `docs/ROADMAP.zh.md`。

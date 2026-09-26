@@ -46,12 +46,11 @@ zf9-ghostlock/
 ├── scripts/fetch-ksu.sh     # download KernelSU v3.3.0 components
 ├── ksu/                     # ksud / kernelsu.ko / ksuinit / ksu.apk (gitignored)
 ├── offsets/                 # 5.10.205 offset table (see below)
-├── docs/
-│   ├── TUTORIAL.md          # full guide (EN)
-│   └── TUTORIAL.zh.md       # full guide (ZH)
 ├── README.md / README.zh.md
-├── CREDITS.md / CREDITS.zh.md
-└── ROADMAP.md / ROADMAP.zh.md
+└── docs/
+    ├── TUTORIAL.md / TUTORIAL.zh.md   # full reproduction guide
+    ├── CREDITS.md  / CREDITS.zh.md    # credits
+    └── ROADMAP.md  / ROADMAP.zh.md    # what we tried / what finally worked
 ```
 
 ---
@@ -87,7 +86,6 @@ On success: `uid=0` → automatic `ksud late-load --kmi android12-5.10 --allow-s
 - **Never `insmod kernelsu.ko`** — it fails on ~40 unexported symbols; use
   `ksud late-load`.
 - Full mechanics and troubleshooting: `docs/TUTORIAL.md`.
-
 ---
 
 ## offsets/
@@ -109,4 +107,4 @@ MIT (see `LICENSE`). **Authorized security research only.**
 
 ## Credits
 
-See `CREDITS.md` — and `ROADMAP.md` for what we tried and what finally worked.
+See `docs/CREDITS.md` — and `docs/ROADMAP.md` for what we tried and what finally worked.
