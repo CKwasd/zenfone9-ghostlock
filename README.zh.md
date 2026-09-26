@@ -32,7 +32,7 @@ adb shell su -c id
 ## 檔案結構
 
 ```
-zf9-ghostlock/
+zenfone9-ghostlock/
 ├── build.sh                 # 編譯 slide_dev
 ├── run.sh                   # push + 啟動 + 提示驗證
 ├── Makefile

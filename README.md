@@ -34,7 +34,7 @@ adb shell su -c id
 ## Layout
 
 ```
-zf9-ghostlock/
+zenfone9-ghostlock/
 ├── build.sh                 # build slide_dev
 ├── run.sh                   # push + launch + verify hint
 ├── Makefile
