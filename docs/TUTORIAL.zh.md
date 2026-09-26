@@ -110,7 +110,7 @@ $ADB shell "su -c id"
 - `noslide`：跳過舊 walk-slide，改用 **perf slide**。
 - `neutral`：頁面中性化。
 - `sweep 64`：噴塗候選輪數。
-- `sweepstart=25`：直接從歷史黏性命中格開始（`phys=0xaccd7000`）。
+- `sweepstart=25`：從格網第 25 格開始——本機每次開機都落中的那一格（`phys=0xaccd7000`）。
 - `ownprobe`：**delta-free 自寫探針**（純 userspace，零 walk 死亡）。
 - `shortseq`：迷你三發序列（見第 5.3 節）。
 
@@ -124,6 +124,7 @@ seq state step=2 landed=1 uid=0 euid=0        <-- 提權成功
 seq result step=3 uid=0 euid=0 gid=0 egid=0
 shortseq: ROOT euid=0 - …
 ```
+> `E3` 是我們的除錯標籤；該值是自定位到的 `task_struct`。
 
 ### 5.3 三發寫（短序列，核心）
 | step | 動作 | 目標 |
@@ -177,8 +178,8 @@ adb install -r ksu.apk
 
 | 症狀 | 原因/對策 |
 |---|---|
-| 找不到 `OWNPROBE HIT` | 落點漂移。改 `sweepstart=24/26`，或去掉 `sweepstart` 用完整格網（會較慢、偶有死亡格）。 |
-| 進程消失、機器重啟 | 觸發了死亡格或 walk fault。**重開機**再跑（一時一開）。 |
+| 找不到 `OWNPROBE HIT` | 落點漂移。改 `sweepstart=24/26`，或去掉 `sweepstart` 用完整格網（會較慢；有些格會 fault）。 |
+| 進程消失、機器重啟 | 打到會 fault 的格位／walk fault。**重開機**再跑（一時一開）。 |
 | `insmod … Unknown symbol` | 正常。**不要用 insmod**；用 `ksud late-load --kmi android12-5.10`。 |
 | `ksud late-load` 卡住 | 未帶 `--kmi`。務必指定 `--kmi android12-5.10`；並讓呼叫端不阻塞等待（`SIGCHLD=SIG_IGN`）。 |
 | `su` 找不到 | 確認 `/proc/modules` 有 `kernelsu`；`/data/adb/ksu/bin` 存在；必要時重跑 `ksud late-load`。 |

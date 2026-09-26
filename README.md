@@ -67,9 +67,12 @@ zf9-ghostlock/
 | `persist` | exploit main path |
 | `noslide` / `neutral` | skip legacy walk-slide; neutralise page |
 | `sweep 64` | spray candidate rounds |
-| `sweepstart=25` | start at the historically sticky cell (phys 0xaccd7000) |
+| `sweepstart=25` | start at grid cell 25 — a cell that has landed every boot on this device (phys 0xaccd7000) |
 | `ownprobe` | pure userspace self-write probe (zero walk deaths) |
 | `shortseq` | mini 3-write sequence: SELinux off → `real_cred`/`cred` = `init_cred` |
+
+*Terms: a **grid cell** is one candidate physical address; a **death cell** is a
+candidate that faults the kernel walk on this build.*
 
 On success: `uid=0` → automatic `ksud late-load --kmi android12-5.10 --allow-shell` → KernelSU.
 

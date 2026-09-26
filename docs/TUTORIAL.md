@@ -115,7 +115,7 @@ on a disturbed memory map).
 - `noslide` — skip legacy walk-slide, use **perf slide**.
 - `neutral` — neutralise the page.
 - `sweep 64` — spray candidate rounds.
-- `sweepstart=25` — start at the historically sticky cell (`phys=0xaccd7000`).
+- `sweepstart=25` — start at grid cell 25, which has landed every boot on this device (`phys=0xaccd7000`).
 - `ownprobe` — **delta-free self-write probe** (pure userspace, zero walk deaths).
 - `shortseq` — the 3-write mini-sequence (section 5.3).
 
@@ -129,6 +129,8 @@ seq state step=2 landed=1 uid=0 euid=0        <-- privilege gained
 seq result step=3 uid=0 euid=0 gid=0 egid=0
 shortseq: ROOT euid=0 - …
 ```
+> The `E3` prefix on the task line is our debug tag; the value is the
+> self-located `task_struct`.
 
 ### 5.3 The three writes (core)
 | step | action | target |
@@ -200,8 +202,8 @@ adb install -r ksu.apk
 
 | Symptom | Cause / fix |
 |---|---|
-| No `OWNPROBE HIT` | placement drifted. Try `sweepstart=24/26`, or drop `sweepstart` for the full grid (slower, occasional death cells). |
-| Process disappears, device reboots | hit a death cell / walk fault. **Reboot** and run again. |
+| No `OWNPROBE HIT` | placement drifted. Try `sweepstart=24/26`, or drop `sweepstart` for the full grid (slower; some cells fault). |
+| Process disappears, device reboots | hit a cell that faults / a walk fault. **Reboot** and run again. |
 | `insmod … Unknown symbol` | expected. **Do not use insmod**; use `ksud late-load --kmi android12-5.10`. |
 | `ksud late-load` hangs | missing `--kmi`. Always pass `--kmi android12-5.10`; don't block waiting on it (`SIGCHLD=SIG_IGN`). |
 | `su` missing | check `/proc/modules` for `kernelsu`; `/data/adb/ksu/bin` exists; re-run `ksud late-load` if needed. |

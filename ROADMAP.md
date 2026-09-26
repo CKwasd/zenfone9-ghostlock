@@ -13,7 +13,7 @@ Goal: root + KernelSU late-load, no boot.img change.
 ```
 perf SAMPLE_IP  -> KASLR (slide)
 OWNPROBE        -> placement (where our spray page is)   [userspace only]
-perf REGS_INTR  -> own task_struct (E3)
+perf REGS_INTR  -> own task_struct (self-location)
 pselect stack_fds overlay + requeue/proxy walk -> constrained write
 3 writes:  (0) selinux_state = page-aligned alias  (1) real_cred = init_cred  (2) cred = init_cred
 ksud late-load --kmi android12-5.10 -> KernelSU
@@ -26,13 +26,13 @@ Run once per fresh boot; ~3-4 minutes; no boot partition change.
 
 | # | Route | Why we tried | Why it failed / was dropped |
 |---|---|---|---|
-| 1 | **Path A: fake `file_operations` hijack + CFI `.cfi_jt` stubs** | Original IonStack shape; would give general kernel R/W | The fops trigger relies on the true-stack UAF (a lottery, ~2%); CFI needed stubs; the victim half was never reached. Not the root cause of progress. |
+| 1 | **Path A: fake `file_operations` hijack + CFI `.cfi_jt` stubs** | Original IonStack shape; would give general kernel R/W | The fops trigger relies on the true-stack UAF (a lottery, ~2%); CFI needed stubs; the second half of the chain was never reached. Not the root cause of progress. |
 | 2 | **SEQPACKET `sendmsg` stack overlay** (sabrina shape) | Deterministic waiter overwrite | On 5.10 the sockaddr lands at `W+0x128`, but the `rt_waiter` is at `sp+0x90` → it **cannot** cover the waiter. |
-| 3 | **sweep grid + walk read for placement** | First-principles start | Per-boot GB-scale placement drift; death cells reshuffle; every wrong deref = panic (UBSAN_TRAP + PANIC_ON_OOPS) → one boot per attempt, no diagnostics. |
-| 4 | **Walk-based slide via loggers / boot_id anchors** | Avoid perf | Anchor slots were filled asynchronously (netd) and non-attributable; walked reads returned garbage ("common-mode drag"). Replaced by perf. |
+| 3 | **sweep grid + walk read for placement** | First-principles start | Per-boot GB-scale placement drift; cells that fault shift around; every wrong deref = panic (UBSAN_TRAP + PANIC_ON_OOPS) → one boot per attempt, no diagnostics. |
+| 4 | **Walk-based slide via loggers / boot_id anchors** | Avoid perf | Anchor slots were filled asynchronously (netd) and non-attributable; walked reads returned garbage that moved with the same bias. Replaced by perf. |
 | 5 | **KernelSnitch for placement** | Public, proven | It worked (mm_struct leak), but gave **zero marginal gain** over `ownprobe`, and grooming risk > sweep cost. Closed. |
 | 6 | **Parent-side RMW (turn SELinux off from the parent)** | Avoid taking the cred path | shape-0 semantics: `value=0` → NULL deref death; `value≠0` → no effect; `B` is a read-only window. |
-| 7 | **Read-back oracles via `boot_id` / poison bait** | Detect whether a write landed | Useful early, but noisy; superseded by `ownprobe` + the E4 write oracle. |
+| 7 | **Read-back oracles via `boot_id` / poison bait** | Detect whether a write landed | Useful early, but noisy; superseded by `ownprobe` + a write oracle. |
 
 ---
 

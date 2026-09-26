@@ -13,7 +13,7 @@
 ```
 perf SAMPLE_IP  -> KASLR（slide）
 OWNPROBE        -> 落點（我們的噴塗頁在哪）      [純 userspace]
-perf REGS_INTR  -> 自己的 task_struct（E3）
+perf REGS_INTR  -> 自己的 task_struct（自定位）
 pselect stack_fds 覆蓋 + requeue/proxy walk -> 受限寫
 三發： (0) selinux_state = 頁對齊 alias  (1) real_cred = init_cred  (2) cred = init_cred
 ksud late-load --kmi android12-5.10 -> KernelSU
@@ -26,13 +26,13 @@ ksud late-load --kmi android12-5.10 -> KernelSU
 
 | # | 路線 | 為何嘗試 | 為何失敗／放棄 |
 |---|---|---|---|
-| 1 | **Path A：偽造 `file_operations` + CFI `.cfi_jt` 樁** | IonStack 原始形態；可拿通用核心 R/W | fops trigger 依賴真棧 UAF（約 2% 抽獎）；需 CFI 樁；victim 半邊從未走到。非進度瓶頸。 |
+| 1 | **Path A：偽造 `file_operations` + CFI `.cfi_jt` 樁** | IonStack 原始形態；可拿通用核心 R/W | fops trigger 依賴真棧 UAF（約 2% 抽獎）；需 CFI 樁；鏈的後半段從未走到。非進度瓶頸。 |
 | 2 | **SEQPACKET `sendmsg` 堆疊覆蓋**（sabrina 形態） | 確定性覆蓋 waiter | 5.10 的 sockaddr 落在 `W+0x128`，而 `rt_waiter` 在 `sp+0x90` → **無法**覆蓋 waiter。 |
-| 3 | **sweep 格網 + walk 讀取定位** | 最初的作法 | 落點逐 boot 漂移 GB 級；死亡格洗牌；一次錯 deref 即 panic（UBSAN_TRAP + PANIC_ON_OOPS）→ 一 boot 一發、無遺言。 |
-| 4 | **以 loggers / boot_id 錨點的 walk-slide** | 想避開 perf | 錨點槽位被非同步填充（netd）、無法歸因；walk 讀回垃圾（「common-mode drag」）。後由 perf 取代。 |
+| 3 | **sweep 格網 + walk 讀取定位** | 最初的作法 | 落點逐 boot 漂移 GB 級；會 fault 的格位四處漂移；一次錯 deref 即 panic（UBSAN_TRAP + PANIC_ON_OOPS）→ 一 boot 一發、無遺言。 |
+| 4 | **以 loggers / boot_id 錨點的 walk-slide** | 想避開 perf | 錨點槽位被非同步填充（netd）、無法歸因；walk 讀回的垃圾值還帶著同一偏差。後由 perf 取代。 |
 | 5 | **KernelSnitch 定位** | 公開且實證 | 可用（mm_struct 洩漏），但相對 `ownprobe` **邊際收益為零**，且 grooming 風險 > sweep 成本。關閉。 |
 | 6 | **parent 側 RMW（由 parent 關 SELinux）** | 避開 cred 路徑 | shape-0 語義：`value=0` → NULL deref 死；`value≠0` → 無效；`B` 是唯讀窗口。 |
-| 7 | **以 `boot_id` / 毒餌做讀回 oracle** | 判斷寫入是否落地 | 早期有用但雜訊大；後由 `ownprobe` + E4 寫入 oracle 取代。 |
+| 7 | **以 `boot_id` / 毒餌做讀回 oracle** | 判斷寫入是否落地 | 早期有用但雜訊大；後由 `ownprobe` + 寫入 oracle 取代。 |
 
 ---
 

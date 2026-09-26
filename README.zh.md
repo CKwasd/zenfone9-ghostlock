@@ -65,9 +65,11 @@ zf9-ghostlock/
 | `persist` | exploit 主路徑 |
 | `noslide` / `neutral` | 略過舊 walk-slide；頁面中性化 |
 | `sweep 64` | 噴塗候選輪 |
-| `sweepstart=25` | 從歷史黏性落點（phys 0xaccd7000）開始 |
+| `sweepstart=25` | 從格網第 25 格開始——本機每次開機都落中的那一格（phys 0xaccd7000） |
 | `ownprobe` | 純 userspace 自寫探針（零 walk 死亡） |
 | `shortseq` | 迷你三發：關 SELinux → `real_cred`/`cred` = `init_cred` |
+
+*名詞：**格網格位**＝一個候選物理位址；**死亡格**＝在本 build 上會讓 kernel walk fault 的候選。*
 
 成功後：`uid=0` → 自動 `ksud late-load --kmi android12-5.10 --allow-shell` → KernelSU。
 
