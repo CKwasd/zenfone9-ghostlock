@@ -97,6 +97,11 @@ $ADB shell "su -c id"
 
 If `su` is not available yet, check that `ksud late-load` ran (section 5.4).
 
+> On success, `slide_dev` automatically runs `ksud late-load` for you, so
+> **KernelSU Manager will pop up / restart by itself**. That popup is your first
+> sign that root and the LKM both succeeded; then confirm with step 4.
+> The exploit process then stays alive ("parking") and does not exit.
+
 ---
 
 ## 5. Step by step

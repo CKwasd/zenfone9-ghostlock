@@ -93,6 +93,10 @@ $ADB shell "su -c id"
 
 若 `su` 尚不可用（首次），先確認 `ksud late-load` 已跑（見第 5.4 節）。
 
+> 成功時 `slide_dev` 會自動替你跑 `ksud late-load`，因此 **KernelSU Manager 會自己彈出／重啟**。
+> 這個彈出畫面就是「root 與 LKM 都成功」的第一個徵兆；接著用第 4 步確認。
+> exploit 進程之後會保持存活（parking）而不退出。
+
 ---
 
 ## 5. 逐步詳解
